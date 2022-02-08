@@ -2,10 +2,17 @@
 import express from 'express';
 import { MongoClient } from 'mongodb';
 import 'dotenv/config';
+import cors from 'cors';
+
+const corsOptions = {
+  origin: process.env.ORIGIN_URL,
+  Credentials: true,
+  optionsSuccessStatus: 200,
+};
 
 const app = express();
 const PORT = process.env.PORT || 4000;
-
+app.use(cors(corsOptions));
 app.use(express.json());
 
 const uri = process.env.DB;
