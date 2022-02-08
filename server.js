@@ -4,6 +4,13 @@ import 'dotenv/config';
 import cors from 'cors';
 import favListRouter from './routes/favList.js';
 import addFavRouter from './routes/RouterAddFav.js';
+import mongoose from 'mongoose';
+
+const uri = process.env.DB;
+
+mongoose.connect(uri, (err) => {
+  console.log('Connected to MongoDB');
+});
 
 const corsOptions = {
   origin: process.env.ORIGIN_URL,

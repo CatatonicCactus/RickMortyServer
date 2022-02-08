@@ -1,25 +1,16 @@
-import { MongoClient } from 'mongodb';
+import RMCharacter from '../models/favSchema.js';
 
-const uri = process.env.DB;
 
-const client = new MongoClient(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  });
-
-client.connect(async (err) => {
-    console.log('Connected to MongoDB');
-  });
 
 export const favList = async (req, res) => {
-    const collection = client.db('RickMorty').collection('favorites');
-    const allFlights = await collection.find({}).toArray();
-    res.send(allFlights);
+    const collection = await RMCharacter.find();
+    res.send(collection);
   };
 
 export const addFavorite = async (req, res) => {
     const body = req.body;
-    const collection = client.db('RickMorty').collection('favorites');
-    const result = await collection.insertOne(body);
-    res.send(result);
+    await RMCharacter.create(body);
+    res.send('created');
   };
+
+
