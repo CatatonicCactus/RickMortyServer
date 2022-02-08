@@ -1,8 +1,9 @@
 // Rick & Morty
 import express from 'express';
-import { MongoClient } from 'mongodb';
 import 'dotenv/config';
 import cors from 'cors';
+import favListRouter from './routes/favList.js';
+import addFavRouter from './routes/RouterAddFav.js';
 
 const corsOptions = {
   origin: process.env.ORIGIN_URL,
@@ -15,29 +16,9 @@ const PORT = process.env.PORT || 4000;
 app.use(cors(corsOptions));
 app.use(express.json());
 
-const uri = process.env.DB;
+app.use(favListRouter);
 
-const client = new MongoClient(uri, {
-  useNewUrlParser: true,
-  useUnifiedTopology: true,
-});
-
-client.connect(async (err) => {
-  console.log('Connected to MongoDB');
-});
-
-app.get('/favorite', async (req, res) => {
-  const collection = client.db('RickMorty').collection('favorites');
-  const allFlights = await collection.find({}).toArray();
-  res.send(allFlights);
-});
-
-app.post('/addFavorite', async (req, res) => {
-  const body = req.body;
-  const collection = client.db('RickMorty').collection('favorites');
-  const result = await collection.insertOne(body);
-  res.send(result);
-});
+app.use(addFavRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
